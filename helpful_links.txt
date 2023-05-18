@@ -1,0 +1,5 @@
+Python Library for DeepL API:
+https://pypi.org/project/deepl/
+
+DeepL API Documentation:
+https://www.deepl.com/docs-api

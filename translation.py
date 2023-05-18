@@ -22,12 +22,12 @@ async def translate(ctx: commands.Context, message_id: int):
 
         translator = deepl.Translator(auth_key)
 
-        result = translator.translate_text({content}, target_lang="FR")
+        result = translator.translate_text(content, target_lang="FR")
         translated_text = result.text
 
         await ctx.send(f"Translated message: {translated_text}")
     except discord.errors.NotFound:
-        await ctx.send(f"Sorry, I couldn't find a message with ID {message_id} in this channel.")
+        await ctx.send(f"Sorry, I couldn't find a message with the ID of  {message_id} in this channel.")
     except Exception as e:
         await ctx.send(f"An error occurred while translating the message: {str(e)}")
 

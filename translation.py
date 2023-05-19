@@ -6,11 +6,12 @@ import deepl
 from dotenv import load_dotenv
 import os
 
+# Load the .env file and get some variables
 load_dotenv()
-
 auth_key = os.getenv('deepl_auth_key')
 bot_token = os.getenv('discord_token')
 
+# Create a bot instance
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -45,10 +46,11 @@ async def translate(ctx: commands.Context, message_id: str):
 
         # Send the translated message
         await ctx.response.send_message(f"Translated message: {translated_text}")
+
     except discord.errors.NotFound:
-        await ctx.response.send_message(f"Sorry, I couldn't find a message with the ID of  {message_id} in this channel.")
+        await ctx.response.send_message(f"Sorry, I couldn't find a message with the ID of {message_id} in this channel.")
     except Exception as e:
-        await ctx.response.send_message(f"An error occurred while translating the message: {str(e)}")
+        await ctx.response.send_message(f"An error occurred while translating the message:\n{str(e)}")
 
 # Context menus (right click menus)
 # Note: Max of 5
@@ -59,7 +61,6 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     content = message.content
 
     translator = deepl.Translator(auth_key)
-
     result = translator.translate_text(content, target_lang="EN-US")
     translated_text = result.text
 
@@ -72,7 +73,6 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     content = message.content
 
     translator = deepl.Translator(auth_key)
-
     result = translator.translate_text(content, target_lang="ES")
     translated_text = result.text
 
@@ -85,7 +85,6 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     content = message.content
 
     translator = deepl.Translator(auth_key)
-
     result = translator.translate_text(content, target_lang="ZH")
     translated_text = result.text
 
@@ -98,7 +97,6 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     content = message.content
 
     translator = deepl.Translator(auth_key)
-
     result = translator.translate_text(content, target_lang="FR")
     translated_text = result.text
 
@@ -111,7 +109,6 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     content = message.content
 
     translator = deepl.Translator(auth_key)
-
     result = translator.translate_text(content, target_lang="UK")
     translated_text = result.text
 

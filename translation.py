@@ -5,6 +5,7 @@ import asyncio
 import deepl
 from dotenv import load_dotenv
 import os
+from language_check import LanguageCheck
 
 # Load the .env file and get some variables
 load_dotenv()
@@ -40,15 +41,17 @@ async def translate(ctx: commands.Context, message_id: str):
         content = message.content
 
         # Translate the message using the DeepL API
+        language_code = "EN-US"
+        language = LanguageCheck.check_language(language_code)
         translator = deepl.Translator(auth_key)
-        result = translator.translate_text(content, target_lang="FR")
+        result = translator.translate_text(content, target_lang=language_code)
         translated_text = result.text
 
         # Send the translated message
-        await ctx.response.send_message(f"Translated message: {translated_text}")
+        await ctx.response.send_message(f"Translated message to __{language}__:\n{translated_text}")
 
     except discord.errors.NotFound:
-        await ctx.response.send_message(f"Sorry, I couldn't find a message with the ID of {message_id} in this channel.")
+        await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.")
     except Exception as e:
         await ctx.response.send_message(f"An error occurred while translating the message:\n{str(e)}")
 
@@ -113,6 +116,5 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     translated_text = result.text
 
     await interaction.response.send_message(f"Translated message to __Ukrainian__:\n{translated_text}", ephemeral=True)
-
 
 bot.run(f"{bot_token}")

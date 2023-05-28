@@ -1,3 +1,4 @@
+import enum
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -6,6 +7,7 @@ import deepl
 from dotenv import load_dotenv
 import os
 from language_check import LanguageCheck
+from languages import LanguageChoices
 
 # Load the .env file and get some variables
 load_dotenv()
@@ -18,6 +20,7 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="/", intents=intents)
 
+# Create a list of language choices for the slash command
 
 @bot.event
 async def on_ready():
@@ -28,9 +31,8 @@ async def on_ready():
     except Exception as e:
         print(f"An error occurred while syncing: {str(e)}")
 
-
-@bot.tree.command()
-async def translate(ctx: commands.Context, message_id: str):
+@bot.tree.command(name="translate", description="Translate a message to one of the listed languages. Note: Default language is English.")
+async def translate(ctx: commands.Context, message_id: str, language: LanguageChoices = None):
     try:
         # Check if the supplied message ID is a number
         if not message_id.isdigit():
@@ -40,15 +42,20 @@ async def translate(ctx: commands.Context, message_id: str):
         message = await ctx.channel.fetch_message(int(message_id))
         content = message.content
 
+        if language is None:
+            language = "EN-US"
+        else:
+            language = language.value
+
         # Translate the message using the DeepL API
-        language_code = "EN-US"
-        language = LanguageCheck.check_language(language_code)
+        language_name = LanguageCheck.check_language(language)
+
         translator = deepl.Translator(auth_key)
-        result = translator.translate_text(content, target_lang=language_code)
+        result = translator.translate_text(content, target_lang=language)
         translated_text = result.text
 
         # Send the translated message
-        await ctx.response.send_message(f"Translated message to __{language}__:\n{translated_text}")
+        await ctx.response.send_message(f"Translated message to __{language_name}__:\n{translated_text}")
 
     except discord.errors.NotFound:
         await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.")
@@ -116,5 +123,6 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     translated_text = result.text
 
     await interaction.response.send_message(f"Translated message to __Ukrainian__:\n{translated_text}", ephemeral=True)
+
 
 bot.run(f"{bot_token}")

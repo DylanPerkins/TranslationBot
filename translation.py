@@ -18,20 +18,20 @@ bot_token = os.getenv('discord_token')
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="/", intents=intents)
+client = commands.Bot(command_prefix="/", intents=intents)
 
 # Create a list of language choices for the slash command
 
-@bot.event
+@client.event
 async def on_ready():
-    print(f"Logged in as {bot.user}")
+    print(f"Logged in as {client.user}")
     try:
-        synced = await bot.tree.sync()
+        synced = await client.tree.sync()
         print(f"Synced {len(synced)} commands")
     except Exception as e:
         print(f"An error occurred while syncing: {str(e)}")
 
-@bot.tree.command(name="translate", description="Translate a message to one of the listed languages. Note: Default language is English.")
+@client.tree.command(name="translate", description="Translate a message to one of the listed languages. Note: Default language is English.")
 async def translate(ctx: commands.Context, message_id: str, language: LanguageChoices = None):
     try:
         # Check if the supplied message ID is a number
@@ -62,11 +62,16 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
     except Exception as e:
         await ctx.response.send_message(f"An error occurred while translating the message:\n{str(e)}")
 
+# Test command
+@client.slash_command()
+async def echo(ctx, message: str):
+    await ctx.send(message)
+
 # Context menus (right click menus)
 # Note: Max of 5
 
 # Translate to English
-@bot.tree.context_menu(name="Translate to English")
+@client.tree.context_menu(name="Translate to English")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
@@ -78,7 +83,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 
 
 # Translate to Spanish
-@bot.tree.context_menu(name="Translate to Spanish")
+@client.tree.context_menu(name="Translate to Spanish")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
@@ -90,7 +95,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 
 
 # Translate to Chinese (Simplified)
-@bot.tree.context_menu(name="Translate to Chinese")
+@client.tree.context_menu(name="Translate to Chinese")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
@@ -102,7 +107,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 
 
 # Translate to French
-@bot.tree.context_menu(name="Translate to French")
+@client.tree.context_menu(name="Translate to French")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
@@ -114,7 +119,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 
 
 # Translate to Ukrainian
-@bot.tree.context_menu(name="Translate to Ukrainian")
+@client.tree.context_menu(name="Translate to Ukrainian")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
@@ -125,4 +130,4 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
     await interaction.response.send_message(f"Translated message to __Ukrainian__:\n{translated_text}", ephemeral=True)
 
 
-bot.run(f"{bot_token}")
+client.run(f"{bot_token}")

@@ -62,11 +62,6 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
     except Exception as e:
         await ctx.response.send_message(f"An error occurred while translating the message:\n{str(e)}")
 
-# Test command
-@client.slash_command()
-async def echo(ctx, message: str):
-    await ctx.send(message)
-
 # Context menus (right click menus)
 # Note: Max of 5
 

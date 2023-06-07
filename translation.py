@@ -31,12 +31,14 @@ async def on_ready():
     except Exception as e:
         print(f"An error occurred while syncing: {str(e)}")
 
-@client.tree.command(name="translate", description="Translate a message to one of the listed languages. Note: Default language is English.")
+@client.tree.command()
 async def translate(ctx: commands.Context, message_id: str, language: LanguageChoices = None):
+    """ Translate a message to one of the listed languages. Note: Default language is English. """
+
     try:
         # Check if the supplied message ID is a number
         if not message_id.isdigit():
-            return await ctx.send("Please enter a valid message ID.")
+            return await ctx.response.send_message("Please enter a valid message ID.", ephemeral=True)
 
         # Fetch the message from the channel
         message = await ctx.channel.fetch_message(int(message_id))
@@ -55,12 +57,12 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
         translated_text = result.text
 
         # Send the translated message
-        await ctx.response.send_message(f"Translated message to __{language_name}__:\n{translated_text}")
+        await ctx.response.send_message(f"### Orginal message:\n{content}\n\n### Translated message to __{language_name}__:\n{translated_text}")
 
     except discord.errors.NotFound:
-        await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.")
+        await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.", ephemeral=True)
     except Exception as e:
-        await ctx.response.send_message(f"An error occurred while translating the message:\n{str(e)}")
+        await ctx.response.send_message(f"Whoops! An error occurred while translating the message:\n{str(e)}", ephemeral=True)
 
 # Context menus (right click menus)
 # Note: Max of 5

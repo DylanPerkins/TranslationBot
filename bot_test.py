@@ -1,54 +1,69 @@
+import enum
 import discord
+from discord import app_commands
 from discord.ext import commands
+import asyncio
 import deepl
 from dotenv import load_dotenv
 import os
+from language_check import LanguageCheck
 from languages import LanguageChoices
 
+# Load the .env file and get some variables
 load_dotenv()
 auth_key = os.getenv('deepl_auth_key')
 bot_token = os.getenv('discord_token')
 
+# Create a bot instance
 intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
+intents.message_content = True
 
-bot = commands.Bot(command_prefix="/", intents=intents)
+client = commands.Bot(command_prefix="/", intents=intents)
 
-@bot.event
+# Create a list of language choices for the slash command
+
+@client.event
 async def on_ready():
-    print(f"Logged in as {bot.user.name} ({bot.user.id})")
+    print(f"Logged in as {client.user}")
     try:
-        await bot.sync_commands()
-        print("Synced commands successfully.")
+        synced = await client.tree.sync()
+        print(f"Synced {len(synced)} commands")
     except Exception as e:
-        print(f"An error occurred while syncing commands: {str(e)}")
+        print(f"An error occurred while syncing: {str(e)}")
 
-@bot.slash_command(
-    name="translate",
-    description="Translate a message to one of the listed languages. Note: Default language is English."
-)
-async def translate(ctx: commands.SlashContext, message_id: int, language: LanguageChoices = None):
+@client.tree.command(name="translate", description="Translate a message to one of the listed languages. Note: Default language is English.")
+async def translate(ctx: commands.Context, message_id: str, language: str):
     try:
-        message = await ctx.channel.fetch_message(message_id)
+        # Check if the supplied message ID is a number
+        if not message_id.isdigit():
+            return await ctx.response.send_message("Please enter a valid message ID.", ephemeral=True)
+
+        # Fetch the message from the channel
+        message = await ctx.channel.fetch_message(int(message_id))
         content = message.content
 
         if language is None:
-            language = LanguageChoices.EN_US
+            language = "EN-US"
         else:
             language = language.value
 
-        language_name = language.name
+        # Translate the message using the DeepL API
+        language_name = LanguageCheck.check_language(language)
 
         translator = deepl.Translator(auth_key)
         result = translator.translate_text(content, target_lang=language)
         translated_text = result.text
 
-        await ctx.send(f"Translated message to __{language_name}__:\n{translated_text}")
+        # Send the translated message
+        await ctx.response.send_message(f"### Orginal message:\n{content}\n\n### Translated message to __{language_name}__:\n{translated_text}")
 
-    except discord.NotFound:
-        await ctx.send(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.")
+    except discord.errors.NotFound:
+        await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.", ephemeral=True)
     except Exception as e:
-        await ctx.send(f"An error occurred while translating the message:\n{str(e)}")
+        await ctx.response.send_message(f"Whoops! An error occurred while translating the message:\n{str(e)}", ephemeral=True)
 
-bot.run(bot_token)
+@translate.autocomplete("language")
+async def language_autocomplete(ctx: commands.Context, argument: str):
+    return [choice for choice in LanguageChoices if choice.value.startswith(argument)]
+
+client.run(bot_token)

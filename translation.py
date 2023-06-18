@@ -1,8 +1,6 @@
 import enum
 import discord
-from discord import app_commands
 from discord.ext import commands
-import asyncio
 import deepl
 from dotenv import load_dotenv
 import os
@@ -20,8 +18,6 @@ intents.message_content = True
 
 client = commands.Bot(command_prefix="/", intents=intents)
 
-# Create a list of language choices for the slash command
-
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
@@ -30,6 +26,7 @@ async def on_ready():
         print(f"Synced {len(synced)} commands")
     except Exception as e:
         print(f"An error occurred while syncing: {str(e)}")
+
 
 @client.tree.command()
 async def translate(ctx: commands.Context, message_id: str, language: LanguageChoices = None):
@@ -52,12 +49,10 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
         # Translate the message using the DeepL API
         language_name = LanguageCheck.check_language(language)
 
-        translator = deepl.Translator(auth_key)
-        result = translator.translate_text(content, target_lang=language)
-        translated_text = result.text
+        translated_text = translation_api_call(content, language)
 
         # Send the translated message
-        await ctx.response.send_message(f"### Orginal message:\n{content}\n\n### Translated message to __{language_name}__:\n{translated_text}")
+        await ctx.response.send_message(f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}")
 
     except discord.errors.NotFound:
         await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.", ephemeral=True)
@@ -72,9 +67,7 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
-    translator = deepl.Translator(auth_key)
-    result = translator.translate_text(content, target_lang="EN-US")
-    translated_text = result.text
+    translated_text = translation_api_call(content, "EN-US")
 
     await interaction.response.send_message(f"Translated message to __English__:\n{translated_text}", ephemeral=True)
 
@@ -84,9 +77,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
-    translator = deepl.Translator(auth_key)
-    result = translator.translate_text(content, target_lang="ES")
-    translated_text = result.text
+    translated_text = translation_api_call(content, "ES")
 
     await interaction.response.send_message(f"Translated message to __Spanish__:\n{translated_text}", ephemeral=True)
 
@@ -96,9 +87,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
-    translator = deepl.Translator(auth_key)
-    result = translator.translate_text(content, target_lang="ZH")
-    translated_text = result.text
+    translated_text = translation_api_call(content, "ZH")
 
     await interaction.response.send_message(f"Translated message to __Chinese (Simplified)__:\n{translated_text}", ephemeral=True)
 
@@ -108,9 +97,7 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
-    translator = deepl.Translator(auth_key)
-    result = translator.translate_text(content, target_lang="FR")
-    translated_text = result.text
+    translated_text = translation_api_call(content, "FR")
 
     await interaction.response.send_message(f"Translated message to __French__:\n{translated_text}", ephemeral=True)
 
@@ -120,11 +107,16 @@ async def translate_to_english(interaction: discord.Interaction, message: discor
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
 
-    translator = deepl.Translator(auth_key)
-    result = translator.translate_text(content, target_lang="UK")
-    translated_text = result.text
+    translated_text = translation_api_call(content, "UK")
 
     await interaction.response.send_message(f"Translated message to __Ukrainian__:\n{translated_text}", ephemeral=True)
+
+# Translation Function
+def translation_api_call(content, target_lang):
+    translator = deepl.Translator(auth_key)
+    result = translator.translate_text(content, target_lang=target_lang)
+    translated_text = result.text
+    return translated_text
 
 
 client.run(f"{bot_token}")

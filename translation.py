@@ -65,7 +65,7 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
 async def invite (ctx: commands.Context):
     """ Get the invite link for the bot. """
     await ctx.response.send_message(f"""
-    Thank you for wanting to invite me to your server!\n\nInvite me here: [Click to Invite Me]({invite_link})
+    Thank you for wanting to invite me to your server!\n\nInvite me here -> [Click to Invite Me]({invite_link})
     """)
 
 # Context menus (right click menus)

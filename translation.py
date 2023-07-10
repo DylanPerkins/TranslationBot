@@ -66,50 +66,55 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
 @client.tree.context_menu(name="Translate to English")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
+    language_name = "English"
 
     translated_text = translation_api_call(content, "EN-US")
 
-    await interaction.response.send_message(f"Translated message to __English__:\n{translated_text}", ephemeral=True)
+    await interaction.response.send_message(f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}", ephemeral=True)
 
 
 # Translate to Spanish
 @client.tree.context_menu(name="Translate to Spanish")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
+    language_name = "Spanish"
 
     translated_text = translation_api_call(content, "ES")
 
-    await interaction.response.send_message(f"Translated message to __Spanish__:\n{translated_text}", ephemeral=True)
+    await interaction.response.send_message(f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}", ephemeral=True)
 
 
 # Translate to Chinese (Simplified)
 @client.tree.context_menu(name="Translate to Chinese")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
+    language_name = "Chinese (Simplified)"
 
     translated_text = translation_api_call(content, "ZH")
 
-    await interaction.response.send_message(f"Translated message to __Chinese (Simplified)__:\n{translated_text}", ephemeral=True)
+    await interaction.response.send_message(f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}", ephemeral=True)
 
 
 # Translate to French
 @client.tree.context_menu(name="Translate to French")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
+    language_name = "French"
 
     translated_text = translation_api_call(content, "FR")
 
-    await interaction.response.send_message(f"Translated message to __French__:\n{translated_text}", ephemeral=True)
+    await interaction.response.send_message(f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}", ephemeral=True)
 
 
 # Translate to Ukrainian
 @client.tree.context_menu(name="Translate to Ukrainian")
 async def translate_to_english(interaction: discord.Interaction, message: discord.Message):
     content = message.content
+    language_name = "Ukrainian"
 
     translated_text = translation_api_call(content, "UK")
 
-    await interaction.response.send_message(f"Translated message to __Ukrainian__:\n{translated_text}", ephemeral=True)
+    await interaction.response.send_message(f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}", ephemeral=True)
 
 # Translation Function
 def translation_api_call(content, target_lang):

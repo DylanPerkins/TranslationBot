@@ -11,6 +11,7 @@ from languages import LanguageChoices
 load_dotenv()
 auth_key = os.getenv('deepl_auth_key')
 bot_token = os.getenv('discord_token')
+invite_link = os.getenv('discord_invite')
 
 # Create a bot instance
 intents = discord.Intents.default()
@@ -27,6 +28,7 @@ async def on_ready():
     except Exception as e:
         print(f"An error occurred while syncing: {str(e)}")
 
+# Slash Commands
 
 @client.tree.command()
 async def translate(ctx: commands.Context, message_id: str, language: LanguageChoices = None):
@@ -58,6 +60,15 @@ async def translate(ctx: commands.Context, message_id: str, language: LanguageCh
         await ctx.response.send_message(f"Sorry, I couldn't find a message with that ID (`{message_id}`) in this channel.", ephemeral=True)
     except Exception as e:
         await ctx.response.send_message(f"Whoops! An error occurred while translating the message:\n{str(e)}", ephemeral=True)
+
+@client.tree.command()
+async def invite (ctx: commands.Context):
+    """ Get the invite link for the bot. """
+    await ctx.response.send_message(f"""
+    Thank you for your interest in wanting to invite me to your server!                                    
+
+    Invite me with this link: {invite_link}
+    """)
 
 # Context menus (right click menus)
 # Note: Max of 5

@@ -1,9 +1,7 @@
 import discord
 from discord.ext import commands
 import deepl
-import asyncio
 from discord import app_commands, Interaction
-from utilities.default import CustomContext
 from utilities.language_check import LanguageCheck
 from utilities.languages import LanguageChoices
 from utilities.data import DiscordBot

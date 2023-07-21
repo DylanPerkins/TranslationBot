@@ -11,8 +11,7 @@ bot = data.DiscordBot(
     allowed_mentions=discord.AllowedMentions(
         everyone=False, roles=False, users=True
     ),
-    intents=discord.Intents.all(),
-    
+    intents=discord.Intents.all()    
 )
 
 try:

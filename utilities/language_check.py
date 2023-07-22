@@ -30,7 +30,7 @@ class LanguageCheck:
         "SV": "Swedish",
         "TR": "Turkish",
         "PT-BR": "Brazilian Portuguese",
-        "PT-PT": "Portuguese"
+        "PT-PT": "Portuguese",
     }
 
     def check_language(self: str):

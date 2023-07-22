@@ -27,31 +27,30 @@ class CustomContext(commands.Context):
     async def ping(self, ctx: CustomContext):
         await ctx.send(f"Pong! {ctx.ping()}")
     """
+
     def __init__(self, **kwargs):
         self.bot: "DiscordBot"
         super().__init__(**kwargs)
+
 
 async def send_message(self, content, **kwargs):
     await self.send(content, **kwargs)
 
 
 def traceback_maker(err, advance: bool = True) -> str:
-    """ A way to debug your code anywhere """
+    """A way to debug your code anywhere"""
     _traceback = "".join(traceback.format_tb(err.__traceback__))
     error = f"```py\n{_traceback}{type(err).__name__}: {err}\n```"
     return error if advance else f"{type(err).__name__}: {err}"
 
 
 def timetext(name) -> str:
-    """ Timestamp, but in text form """
+    """Timestamp, but in text form"""
     return f"{name}_{int(time.time())}.txt"
 
 
-def date(
-    target, clock: bool = True,
-    ago: bool = False, only_ago: bool = False
-) -> str:
-    """ Converts a timestamp to a Discord timestamp format """
+def date(target, clock: bool = True, ago: bool = False, only_ago: bool = False) -> str:
+    """Converts a timestamp to a Discord timestamp format"""
     if isinstance(target, int) or isinstance(target, float):
         target = datetime.utcfromtimestamp(target)
 
@@ -65,23 +64,23 @@ def date(
 
 
 async def pretty_results(
-    ctx: CustomContext, filename: str = "Results",
-    resultmsg: str = "Here's the results:", loop: list = None
+    ctx: CustomContext,
+    filename: str = "Results",
+    resultmsg: str = "Here's the results:",
+    loop: list = None,
 ) -> None:
-    """ A prettier way to show loop results """
+    """A prettier way to show loop results"""
     if not loop:
         return await ctx.send("The result was empty...")
 
-    pretty = "\r\n".join([f"[{str(num).zfill(2)}] {data}" for num, data in enumerate(loop, start=1)])
+    pretty = "\r\n".join(
+        [f"[{str(num).zfill(2)}] {data}" for num, data in enumerate(loop, start=1)]
+    )
 
     if len(loop) < 15:
         return await ctx.send(f"{resultmsg}```ini\n{pretty}```")
 
-    data = BytesIO(pretty.encode('utf-8'))
+    data = BytesIO(pretty.encode("utf-8"))
     await ctx.send(
-        content=resultmsg,
-        file=discord.File(
-            data,
-            filename=timetext(filename.title())
-        )
+        content=resultmsg, file=discord.File(data, filename=timetext(filename.title()))
     )

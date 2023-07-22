@@ -1,5 +1,6 @@
 import enum
 
+
 class LanguageChoices(enum.Enum):
     English = "EN-US"
     Spanish = "ES"
@@ -15,13 +16,13 @@ class LanguageChoices(enum.Enum):
     Estonian = "ET"
     Finnish = "FI"
     Hungarian = "HU"
-    Indonesian = "ID" 
+    Indonesian = "ID"
     Italian = "IT"
     Japanese = "JA"
     Korean = "KO"
     Lithuanian = "LT"
     Latvian = "LV"
-    Norwegian = "NB" # Norwegian Bokmål
+    Norwegian = "NB"  # Norwegian Bokmål
     Dutch = "NL"
     Polish = "PL"
     # Brazilian = "PT-BR" # Brazilian Portuguese

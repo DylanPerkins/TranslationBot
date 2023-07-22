@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from utilities.data import DiscordBot
 from utilities.default import CustomContext

@@ -12,7 +12,7 @@ class Invite(commands.Cog):
     async def invite(self, ctx: CustomContext):
         """ Get the invite link for the bot. """
         invite_link = self.bot.config.discord_invite
-        await ctx.response.send_message(f"""
+        await ctx.send(f"""
         Thank you for wanting to invite me to your server!\n\nInvite me here -> [Click to Invite Me]({invite_link})
         """)
 

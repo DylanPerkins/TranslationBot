@@ -9,15 +9,13 @@ class Sync(commands.Cog):
         self.bot: DiscordBot = bot
 
     @commands.hybrid_command()
-    async def sync(self, ctx: CustomContext, user: discord.User = None):
+    async def sync(self, ctx: CustomContext):
         """Sync the commands with discord."""
-
-        if user is None:
-            user = ctx.author
+        user = await self.bot.fetch_user(ctx.author.id)
 
         if self.bot.config.discord_owner_id == user.id:
             await self.bot.tree.sync()
-            await ctx.send("Synced commands with discord.")
+            await ctx.send("Synced commands with discord.", delete_after=10)
         else:
             await ctx.send("You are not the owner of this bot :P Nice try though!.")
 

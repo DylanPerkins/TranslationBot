@@ -56,7 +56,7 @@ class TranslateMessage(commands.Cog):
             # Check if the supplied message ID is a number
             if not message_id.isdigit():
                 return await ctx.send(
-                    "Please enter a valid message link.", ephemeral=True
+                    "Please enter a valid message link.", ephemeral=True, delete_after=10
                 )
 
             # Fetch the message from the channel

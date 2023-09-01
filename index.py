@@ -2,7 +2,7 @@ import os
 import discord
 from utilities import config, data
 
-config = config.Config.from_env(".testing.env")
+config = config.Config.from_env(".production.env")
 print("Logging in...")
 
 bot = data.DiscordBot(

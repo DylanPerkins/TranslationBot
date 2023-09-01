@@ -14,11 +14,6 @@ bot = data.DiscordBot(
     intents=discord.Intents.all(),
 )
 
-async def load_cogs():
-    for filename in os.listdir("./cogs"):
-        if filename.endswith(".py"):
-            bot.load_extension(f"cogs.{filename[:-3]}")
-
 ## Run bot
 try:
     bot.run(config.discord_token)

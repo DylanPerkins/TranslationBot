@@ -56,11 +56,20 @@ class TranslateMessage(commands.Cog):
             # Check if the supplied message ID is a number
             if not message_id.isdigit():
                 return await ctx.send(
-                    "Please enter a valid message link.", ephemeral=True, delete_after=10
+                    "Please enter a valid message link.",
+                    ephemeral=True,
+                    delete_after=10,
                 )
 
             # Fetch the message from the channel
-            message = await ctx.channel.fetch_message(int(message_id))
+            try:
+                message = await ctx.channel.fetch_message(int(message_id))
+            except discord.NotFound:
+                return await ctx.send(
+                    f"Sorry, I couldn't find a message with that link (`{message_link}`) in this channel.",
+                    ephemeral=True,
+                )
+
             content = message.content
 
             if language is None:
@@ -71,20 +80,21 @@ class TranslateMessage(commands.Cog):
             # Translate the message using the DeepL API
             target_language_name = LanguageCheck.check_language(language)
 
-            translated_text = translation_api_call(content, auth_key, language)
+            translated_text, source_language = translation_api_call(content, auth_key, language)
+
+            source_language_name = LanguageCheck.check_language(source_language)
 
             # Send the translated message
-            await ctx.send(
-                f"### Orginal message:\n{content}\n### Translated message to __{target_language_name}__:\n{translated_text}",
-                delete_after=300,
-                silent=True,
-            )
-
-        except discord.errors.NotFound:
-            await ctx.send(
-                f"Sorry, I couldn't find a message with that link (`{message_link}`) in this channel.",
-                ephemeral=True,
-            )
+            try:
+                await ctx.send(
+                    f"Orginal language: {source_language_name}\n### Translated message to __{target_language_name}__:\n{translated_text}",
+                    delete_after=300,
+                    silent=True,
+                )
+            except discord.DiscordException:
+                return await ctx.send(
+                    "Sorry, I couldn't send the translated message because the message was too long!"
+                )
         except Exception as e:
             await ctx.send(
                 f"Whoops! An error occurred while translating the message:\n{str(e)}",
@@ -175,7 +185,8 @@ def translation_api_call(content, auth_key, target_lang):
 
     result = translator.translate_text(content, target_lang=target_lang)
     translated_text = result.text
-    return translated_text
+    source_language = result.detected_source_lang
+    return translated_text, source_language
 
 
 async def setup(bot):

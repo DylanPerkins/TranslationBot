@@ -2,6 +2,7 @@ class LanguageCheck:
     LANGUAGES = {
         "EN-US": "English",
         "EN-GB": "English (British)",
+        "EN": "English",
         "ES": "Spanish",
         "ZH": "Chinese (Simplified)",
         "FR": "French",
@@ -31,6 +32,7 @@ class LanguageCheck:
         "TR": "Turkish",
         "PT-BR": "Brazilian Portuguese",
         "PT-PT": "Portuguese",
+        "PT": "Portuguese or Spanish",
     }
 
     def check_language(self: str):

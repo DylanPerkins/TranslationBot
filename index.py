@@ -1,3 +1,4 @@
+import os
 import discord
 from utilities import config, data
 
@@ -12,6 +13,11 @@ bot = data.DiscordBot(
     allowed_mentions=discord.AllowedMentions(everyone=False, roles=False, users=True),
     intents=discord.Intents.all(),
 )
+
+async def load_cogs():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            bot.load_extension(f"cogs.{filename[:-3]}")
 
 ## Run bot
 try:

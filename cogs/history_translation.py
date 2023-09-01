@@ -41,7 +41,7 @@ class TranslateMessageHistory(commands.Cog):
 
             # Get the message objects from the message IDs
             message_objects = []
-            limit = 100  # Adjust the limit as needed to fetch a sufficient number of messages
+            limit = 100  # Message limit
 
             async for message in ctx.channel.history(
                 limit=limit,
@@ -51,7 +51,7 @@ class TranslateMessageHistory(commands.Cog):
             ):
                 message_objects.append(message)
 
-            # Include the message data of the specified message links
+            # Find the message data between the message links
             if not message_objects or message_objects[0].id != message_id_top:
                 # Fetch the 'top' message link data
                 try:
@@ -96,14 +96,17 @@ class TranslateMessageHistory(commands.Cog):
             await ctx.send(links_message)
 
             # Fetch the message id of the links_message
-            links_message_id = links_message.split(" ")[-1]
+            links_message_id = fetch_message_id(self, links_message)
 
             # Create a public thread on the original message
-            thread = await create_thread(ctx, links_message_id)
+            thread = await create_thread(ctx, int(links_message_id))
 
             # Send the original and translated content in the new public thread
             await thread.send(
-                f"### Original Message Content:\n{message_content}\n### Translated message to __{language_name}__:\n{translated_message}"
+                f"### Original Message Content:\n{message_content}"
+            )
+            await thread.send(
+                f"### Translated Message Content to __{language_name}__:\n{translated_message}"
             )
 
         except discord.errors.NotFound:
@@ -117,15 +120,18 @@ class TranslateMessageHistory(commands.Cog):
                 ephemeral=True,
             )
 
-async def create_thread(ctx: commands.Context, message_id):
+async def create_thread(ctx: commands.Context, message_id: int):
     thread_name = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    thread = await ctx.channel.create_thread(
-        name=f"translation_thread_{thread_name}",
-        message=message_id,
-        type=discord.ChannelType.public_thread,
+    thread = await discord.message.Message.create_thread(
+        self=ctx.message.channel.fetch_message(message_id),
+        name=f"Translation Thread by {ctx.author} - {thread_name}",
         reason="Thread for message translation",
     )
     return thread
+
+# Fetch the message id of the links_message
+async def fetch_message_id(self, message):
+    return message.id
 
 
 async def setup(bot):

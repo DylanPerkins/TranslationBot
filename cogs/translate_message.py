@@ -69,13 +69,13 @@ class TranslateMessage(commands.Cog):
                 language = language.value
 
             # Translate the message using the DeepL API
-            language_name = LanguageCheck.check_language(language)
+            target_language_name = LanguageCheck.check_language(language)
 
             translated_text = translation_api_call(content, auth_key, language)
 
             # Send the translated message
             await ctx.send(
-                f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}",
+                f"### Orginal message:\n{content}\n### Translated message to __{target_language_name}__:\n{translated_text}",
                 delete_after=300,
                 silent=True,
             )

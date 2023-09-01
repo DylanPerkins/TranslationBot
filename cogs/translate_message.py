@@ -6,6 +6,7 @@ from utilities.language_check import LanguageCheck
 from utilities.languages import LanguageChoices
 from utilities.data import DiscordBot
 
+message_too_long = "Sorry, I couldn't send the translated message because the message was too long!"
 
 class TranslateMessage(commands.Cog):
     def __init__(self, bot):
@@ -40,6 +41,7 @@ class TranslateMessage(commands.Cog):
                 name="Translate to Ukrainian", callback=self.translate_to_ukrainian
             )
         )
+
 
     @commands.hybrid_command()
     async def translate(
@@ -80,20 +82,22 @@ class TranslateMessage(commands.Cog):
             # Translate the message using the DeepL API
             target_language_name = LanguageCheck.check_language(language)
 
-            translated_text, source_language = translation_api_call(content, auth_key, language)
+            translated_text, source_language = translation_api_call(
+                content, auth_key, language
+            )
 
             source_language_name = LanguageCheck.check_language(source_language)
 
             # Send the translated message
             try:
                 await ctx.send(
-                    f"Orginal language: {source_language_name}\n### Translated message to __{target_language_name}__:\n{translated_text}",
+                    f"**Orginal language:** *{source_language_name}*\n### Translated message to __{target_language_name}__:\n{translated_text}",
                     delete_after=300,
                     silent=True,
                 )
             except discord.DiscordException:
                 return await ctx.send(
-                    "Sorry, I couldn't send the translated message because the message was too long!"
+                    {message_too_long}
                 )
         except Exception as e:
             await ctx.send(
@@ -111,12 +115,21 @@ class TranslateMessage(commands.Cog):
         auth_key = self.bot.config.deepl_auth_key
         language_name = "English"
 
-        translated_text = translation_api_call(content, auth_key, "EN-US")
-
-        await interaction.response.send_message(
-            f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}",
-            ephemeral=True,
+        translated_text, source_language = translation_api_call(
+            content, auth_key, "EN-US"
         )
+
+        source_language_name = LanguageCheck.check_language(source_language)
+        try:
+            await interaction.response.send_message(
+                f"**Orginal language:** *{source_language_name}*\n### Translated message to __{language_name}__:\n{translated_text}",
+                ephemeral=True,
+            )
+        except discord.DiscordException:
+            return await interaction.response.send_message(
+                {message_too_long},
+                ephemeral=True,
+            )
 
     # Translate to Spanish
     async def translate_to_spanish(
@@ -126,12 +139,19 @@ class TranslateMessage(commands.Cog):
         auth_key = self.bot.config.deepl_auth_key
         language_name = "Spanish"
 
-        translated_text = translation_api_call(content, auth_key, "ES")
+        translated_text, source_language = translation_api_call(content, auth_key, "ES")
 
-        await interaction.response.send_message(
-            f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}",
-            ephemeral=True,
-        )
+        source_language_name = LanguageCheck.check_language(source_language)
+        try:
+            await interaction.response.send_message(
+                f"**Orginal language:** *{source_language_name}*\n### Translated message to __{language_name}__:\n{translated_text}",
+                ephemeral=True,
+            )
+        except discord.DiscordException:
+            return await interaction.response.send_message(
+                {message_too_long},
+                ephemeral=True,
+            )
 
     # Translate to Chinese (Simplified)
     async def translate_to_chinese(
@@ -141,12 +161,19 @@ class TranslateMessage(commands.Cog):
         auth_key = self.bot.config.deepl_auth_key
         language_name = "Chinese (Simplified)"
 
-        translated_text = translation_api_call(content, auth_key, "ZH")
+        translated_text, source_language = translation_api_call(content, auth_key, "ZH")
 
-        await interaction.response.send_message(
-            f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}",
-            ephemeral=True,
-        )
+        source_language_name = LanguageCheck.check_language(source_language)
+        try:
+            await interaction.response.send_message(
+                f"**Orginal language:** *{source_language_name}*\n### Translated message to __{language_name}__:\n{translated_text}",
+                ephemeral=True,
+            )
+        except discord.DiscordException:
+            return await interaction.response.send_message(
+                {message_too_long},
+                ephemeral=True,
+            )
 
     # Translate to French
     async def translate_to_french(
@@ -156,12 +183,19 @@ class TranslateMessage(commands.Cog):
         auth_key = self.bot.config.deepl_auth_key
         language_name = "French"
 
-        translated_text = translation_api_call(content, auth_key, "FR")
+        translated_text, source_language = translation_api_call(content, auth_key, "FR")
 
-        await interaction.response.send_message(
-            f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}",
-            ephemeral=True,
-        )
+        source_language_name = LanguageCheck.check_language(source_language)
+        try:
+            await interaction.response.send_message(
+                f"**Orginal language:** *{source_language_name}*\n### Translated message to __{language_name}__:\n{translated_text}",
+                ephemeral=True,
+            )
+        except discord.DiscordException:
+            return await interaction.response.send_message(
+                {message_too_long},
+                ephemeral=True,
+            )
 
     # Translate to Ukrainian
     async def translate_to_ukrainian(
@@ -171,12 +205,19 @@ class TranslateMessage(commands.Cog):
         auth_key = self.bot.config.deepl_auth_key
         language_name = "Ukrainian"
 
-        translated_text = translation_api_call(content, auth_key, "UK")
+        translated_text, source_language = translation_api_call(content, auth_key, "UK")
 
-        await interaction.response.send_message(
-            f"### Orginal message:\n{content}\n### Translated message to __{language_name}__:\n{translated_text}",
-            ephemeral=True,
-        )
+        source_language_name = LanguageCheck.check_language(source_language)
+        try:
+            await interaction.response.send_message(
+                f"**Orginal language:** *{source_language_name}*\n### Translated message to __{language_name}__:\n{translated_text}",
+                ephemeral=True,
+            )
+        except discord.DiscordException:
+            return await interaction.response.send_message(
+                {message_too_long},
+                ephemeral=True,
+            )
 
 
 # Translation Function

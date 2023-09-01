@@ -134,4 +134,3 @@ dmypy.json
 cython_debug/
 
 # Repo Specific
-testing.py

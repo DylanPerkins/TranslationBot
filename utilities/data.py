@@ -3,10 +3,10 @@ import os
 
 from utilities import permissions, default
 from utilities.config import Config
-from discord.ext.commands import AutoShardedBot
+from discord.ext.commands import Bot
 
 
-class DiscordBot(AutoShardedBot):
+class DiscordBot(Bot):
     def __init__(self, config: Config, prefix: list[str] = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prefix = prefix
@@ -19,6 +19,8 @@ class DiscordBot(AutoShardedBot):
 
             name = file[:-3]
             await self.load_extension(f"cogs.{name}")
+
+        await self.tree.sync()
 
     async def on_message(self, msg: discord.Message):
         if (

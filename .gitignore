@@ -133,4 +133,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Repo Specific
+# VS Code settings
+.vscode/

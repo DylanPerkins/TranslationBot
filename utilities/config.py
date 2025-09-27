@@ -11,7 +11,7 @@ class Config:
     discord_token: str
     discord_application_id: str
     discord_public_key: str
-    discord_prefix: str
+    discord_sync: str
     discord_owner_id: str
     discord_owner_guild_id: str
     discord_invite: str
@@ -36,4 +36,8 @@ class Config:
     @classmethod
     def from_env(cls, filename: str = ".env") -> "Config":
         """Create a Config object from a .env file."""
-        return Config.from_dict(**dotenv_values(filename))
+        try:
+            env_values = dotenv_values(filename)
+            return Config.from_dict(**env_values)
+        except Exception as e:
+            raise ValueError(f"Error loading .env file: {e}")

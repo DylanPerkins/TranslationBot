@@ -1,21 +1,22 @@
-import os
-import discord
-from utilities import config, data
+from discord_http.gateway import Intents
 
-config = config.Config.from_env(".production.env")
+from utilities import config
+from utilities.data import CustomClient
+
+config = config.Config.from_env(".env")
 print("Logging in...")
 
-bot = data.DiscordBot(
+client = CustomClient(
     config=config,
-    command_prefix=config.discord_prefix,
-    prefix=config.discord_prefix,
-    command_attrs=dict(hidden=True),
-    allowed_mentions=discord.AllowedMentions(everyone=False, roles=False, users=True),
-    intents=discord.Intents.all(),
+    token=config.discord_token,
+    application_id=config.discord_application_id,
+    public_key=config.discord_public_key,
+    sync=config.discord_sync.lower() == "true",
+    intents=Intents(1)
 )
 
-## Run bot
+# Run bot
 try:
-    bot.run(config.discord_token)
+    client.start()
 except Exception as e:
     print(f"Error when logging in: {e}")

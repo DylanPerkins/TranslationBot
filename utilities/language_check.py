@@ -35,5 +35,6 @@ class LanguageCheck:
         "PT": "Portuguese or Spanish",
     }
 
-    def check_language(self: str):
-        return LanguageCheck.LANGUAGES.get(self, "Unknown language")
+    @staticmethod
+    def check_language(lang_code: str) -> str:
+        return LanguageCheck.LANGUAGES.get(lang_code, "Unknown language")

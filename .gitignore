@@ -135,3 +135,5 @@ cython_debug/
 
 # VS Code settings
 .vscode/
+
+polyglot.conf

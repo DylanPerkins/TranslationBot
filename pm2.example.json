@@ -1,0 +1,13 @@
+{
+  "apps": [{
+    "name": "app_name",
+    "script": "index.py",
+    "interpreter": "./venv_name/bin/python3",
+    "interpreter_args": "-u",
+    "cwd": "/path/to/your/project",
+    "autorestart": true,
+    "watch": false,
+    "max_memory_restart": "1G",
+    "time": true
+  }]
+}

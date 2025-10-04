@@ -87,7 +87,7 @@ You will need to follow the steps from the Local Development section, excluding 
 
 8. **Set up Webhooks**: Input your domain name in the Interactions Endpoint URL field in your Discord application settings through the Discord Developer Portal. Make sure the bot is running before trying to "save" the changes in the Discord Developer Portal.
 
-***Note**: See Local Development step 6 for instructions on setting up webhooks.*
+   ***Note**: See Local Development step 6 for instructions on setting up webhooks.*
 
 9. **Invite the Bot to Your Server**: Use the OAuth2 URL Generator in the Discord Developer Portal to generate an invite link for your bot with the necessary permissions and invite it to your server.
 
@@ -99,5 +99,5 @@ Feel free to fork the repository and submit pull requests. Please ensure that yo
 
 ## Thanks
 
-- Thanks to [DeepL](https://www.deepl.com/pro-api) for providing a powerful translation API.
+- Thanks to [DeepL](https://www.deepl.com/pro-api) for providing an accurate translation API.
 - Thanks to [discord.http](https://discordhttp.alexflipnote.dev/) for creating a interactions library for Discord using python that is easy to use and understand.

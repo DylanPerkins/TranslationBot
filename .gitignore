@@ -137,3 +137,4 @@ cython_debug/
 .vscode/
 
 polyglot.conf
+pm2.json
